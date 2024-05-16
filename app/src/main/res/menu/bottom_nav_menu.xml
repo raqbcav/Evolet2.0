@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/inicio"
+        android:title="@string/inicio"
+        android:icon="@drawable/ic_home_black_24dp" />
+    <item
+        android:id="@+id/ciclos"
+        android:title="@string/ciclos"
+        android:icon="@drawable/ic_dashboard_black_24dp" />
+    <item
+        android:id="@+id/carreras"
+        android:title="@string/carreras"
+        android:icon="@drawable/ic_race_black_24dp" />
+    <item
+        android:id="@+id/tu"
+        android:title="@string/tu"
+        android:icon="@drawable/ic_person_black_24dp" />
+</menu>
