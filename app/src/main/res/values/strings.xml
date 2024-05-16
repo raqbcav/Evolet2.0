@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Evolet 2.0</string>
+    <string name="entrar">Entrar</string>
+    <string name="crear_nueva_cuenta">Crear nueva cuenta</string>
+    <string name="o">-------- O --------</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="registro">Registro</string>
+    <string name="crear">Crear</string>
+    <string name="confirmar_password">Confirmar Contraseña</string>
+    <string name="nombre">Nombre</string>
+    <string name="perfil">Perfil</string>
+    <string name="logo">Logo</string>
+    <string-array name="perfiles">
+        <item>Entrenador</item>
+        <item>Deportista</item>
+    </string-array>
+</resources>
