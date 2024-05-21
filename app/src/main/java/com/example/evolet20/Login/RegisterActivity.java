@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Button btnRegister = findViewById(R.id.btnRegister);
         Spinner spPerfil = findViewById(R.id.spPerfil);
@@ -102,8 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Snackbar.make(view, "Usuario registrado con éxito.", Snackbar.LENGTH_LONG).show();
-                                    Intent intentMain = new Intent(RegisterActivity.this, MainActivity.class);
-                                    startActivity(intentMain);
+                                    Intent intentLogin = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    startActivity(intentLogin);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -127,6 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error if needed
+                String error = databaseError.getMessage();
+                String error2 = databaseError.getDetails();
             }
         });
     }
