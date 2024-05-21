@@ -2,23 +2,31 @@ package com.example.evolet20.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.evolet20.MainActivity;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -64,6 +72,16 @@ public class RegisterActivity extends AppCompatActivity {
             String newPass = etPass.getText().toString();
             String newPass2 = etPass2.getText().toString();
 
+            if(existeUsuario(mDatabase, email)){
+                Snackbar.make(view, "Ya existe un usuario con ese email.", Snackbar.LENGTH_LONG).show();
+                return false;
+            }
+
+            if(!isValidEmail(email)){
+                Snackbar.make(view, "El formato del email no es válido.", Snackbar.LENGTH_LONG).show();
+                return false;
+            }
+
             if (!newPass.equals(newPass2)){
                 Snackbar.make(view, "Las contraseñas deben ser iguales.", Snackbar.LENGTH_LONG).show();
                 return false;
@@ -78,5 +96,13 @@ public class RegisterActivity extends AppCompatActivity {
             Snackbar.make(view, "Error al registrar el usuario.", Snackbar.LENGTH_LONG).show();
             return false;
         }
+    }
+
+    private boolean existeUsuario(DatabaseReference mDatabase, String email) {
+        return false;
+    }
+
+    private boolean isValidEmail(CharSequence email) {
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
