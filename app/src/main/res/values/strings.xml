@@ -25,4 +25,7 @@
     <string name="hoy">Hoy</string>
     <string name="semana">Semana</string>
     <string name="mes">Mes</string>
+    <string name="nuevas_carreras">Nuevas Carreras</string>
+    <string name="mp">MP</string>
+    <string name="agregar">Agregar</string>
 </resources>
