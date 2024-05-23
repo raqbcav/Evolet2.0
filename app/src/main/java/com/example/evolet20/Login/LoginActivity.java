@@ -14,7 +14,9 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.evolet20.MainActivity;
+import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
+import com.example.evolet20.Static.Globals;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -67,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         String storedHash = userSnapshot.child("pass").getValue(String.class);
                         if (storedHash != null && BCrypt.checkpw(password, storedHash)) {
+                            saveUsuarioGlobals(userSnapshot, storedHash);
                             Snackbar.make(view, "Inicio de sesión exitoso.", Snackbar.LENGTH_LONG).show();
                             Intent intentMain = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intentMain);
@@ -77,6 +80,13 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Snackbar.make(view, "No se encontró un usuario con ese email.", Snackbar.LENGTH_LONG).show();
                 }
+            }
+
+            private void saveUsuarioGlobals(DataSnapshot userSnapshot, String storedHash) {
+                String storedEmail = userSnapshot.child("email").getValue(String.class);
+                String storedNombre = userSnapshot.child("nombre").getValue(String.class);
+                String storedPerfil = userSnapshot.child("perfil").getValue(String.class);
+                Globals.usuario = new Usuario(storedPerfil, storedNombre, storedEmail, storedHash);
             }
 
             @Override
