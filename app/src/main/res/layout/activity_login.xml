@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@id/llUsuario"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
 
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp" />
 
         <EditText
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
 
