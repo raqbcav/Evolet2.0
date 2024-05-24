@@ -20,6 +20,17 @@
         <item>Entrenador</item>
         <item>Deportista</item>
     </string-array>
+    <string-array name="tipoCarrera">
+        <item>Trail</item>
+        <item>Asfalto</item>
+    </string-array>
+    <string-array name="distanciaCarrera">
+        <item>5K</item>
+        <item>10K</item>
+        <item>15K</item>
+        <item>21K</item>
+        <item>42K</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hoy">Hoy</string>
@@ -29,4 +40,5 @@
     <string name="mp">MP</string>
     <string name="agregar">Agregar</string>
     <string name="filtros">Filtros</string>
+    <string name="lugar">Lugar</string>
 </resources>
