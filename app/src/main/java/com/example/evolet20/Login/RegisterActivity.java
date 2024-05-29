@@ -69,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
         EditText etPass = findViewById(R.id.etPass);
         EditText etPass2 = findViewById(R.id.etPass2);
 
+        String id = UUID.randomUUID().toString();
         String perfil = spPerfil.getSelectedItem().toString();
         String nombre = etNombre.getText().toString();
         String email = etEmail.getText().toString();
@@ -97,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Snackbar.make(view, "Ya existe un usuario con ese email.", Snackbar.LENGTH_LONG).show();
                 } else {
                     String hashPass = BCrypt.hashpw(newPass, BCrypt.gensalt());
-                    Usuario usuario = new Usuario(perfil, nombre, email, hashPass);
+                    Usuario usuario = new Usuario(id, perfil, nombre, email, hashPass);
                     mDatabase.child("usuarios").child(UUID.randomUUID().toString()).setValue(usuario)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

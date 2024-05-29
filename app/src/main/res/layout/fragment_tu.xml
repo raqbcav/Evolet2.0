@@ -6,10 +6,141 @@
     android:background="@color/fondo"
     tools:context=".Fragments.TuFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/tu" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center">
 
+        <!-- Icon at the top -->
+        <ImageView
+            android:layout_width="214dp"
+            android:layout_height="201dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_person_big_96dp" />
+
+
+        <!-- Row 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/nombre"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:enabled="false"
+                android:hint="@string/nombre"
+                android:textSize="16sp"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Row 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/email"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:enabled="false"
+                android:hint="@string/email"
+                android:textSize="16sp"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <!-- Row 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/password"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/etPass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:enabled="false"
+                android:hint="@string/password"
+                android:textSize="16sp"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <!-- Row 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/confirmar_password"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/etPass2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:enabled="false"
+                android:hint="@string/confirmar_password"
+                android:textSize="16sp"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <!-- Button -->
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/guardar"
+            android:visibility="gone"
+            android:textSize="16sp"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btnEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editar"
+            android:textSize="16sp"
+            android:layout_gravity="center" />
+    </LinearLayout>
 </FrameLayout>

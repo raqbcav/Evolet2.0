@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.evolet20.MainActivity;
 import com.example.evolet20.R;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class WelcomeActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentLogin = new Intent(WelcomeActivity.this, LoginActivity.class);
+                Intent intentLogin = new Intent(WelcomeActivity.this, MainActivity.class);
                 startActivity(intentLogin);
             }
         });

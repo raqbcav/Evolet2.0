@@ -83,10 +83,11 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             private void saveUsuarioGlobals(DataSnapshot userSnapshot, String storedHash) {
+                String storedId = userSnapshot.child("id").getValue(String.class);
                 String storedEmail = userSnapshot.child("email").getValue(String.class);
                 String storedNombre = userSnapshot.child("nombre").getValue(String.class);
                 String storedPerfil = userSnapshot.child("perfil").getValue(String.class);
-                Globals.usuario = new Usuario(storedPerfil, storedNombre, storedEmail, storedHash);
+                Globals.usuario = new Usuario(storedId, storedPerfil, storedNombre, storedEmail, storedHash);
             }
 
             @Override

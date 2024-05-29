@@ -41,4 +41,6 @@
     <string name="agregar">Agregar</string>
     <string name="filtros">Filtros</string>
     <string name="lugar">Lugar</string>
+    <string name="guardar">Guardar</string>
+    <string name="editar">Editar</string>
 </resources>

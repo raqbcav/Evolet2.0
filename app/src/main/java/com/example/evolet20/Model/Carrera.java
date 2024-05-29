@@ -5,17 +5,17 @@ public class Carrera {
     public String distancia;
     public String lugar;
     public String fecha;
-    public String email;
+    public String idUsuario;
 
     public Carrera(){
 
     }
 
-    public Carrera(String tipo, String distancia, String lugar, String fecha, String email){
+    public Carrera(String tipo, String distancia, String lugar, String fecha, String idUsuario){
         this.tipo = tipo;
         this.distancia = distancia;
         this.lugar = lugar;
         this.fecha = fecha;
-        this.email = email;
+        this.idUsuario = idUsuario;
     }
 }

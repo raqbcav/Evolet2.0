@@ -35,7 +35,6 @@ import java.util.Locale;
 public class CarrerasFragment extends Fragment {
 
     private Button btnNewCarrera;
-
     private Spinner spFiltroTipo, spFiltroDistancia, spNewTipo, spNewDistancia;
     private EditText etFiltroFecha, etNewFecha, etNewLugar;
     private ImageButton ibFiltroFecha, ibNewFecha;
@@ -172,7 +171,7 @@ public class CarrerasFragment extends Fragment {
         String carreraId = carrerasRef.push().getKey();
 
         // Crear un objeto Map para los datos de la carrera
-        Carrera carrera = new Carrera(tipoCarrera, distanciaCarrera, lugarCarrera, fechaCarrera, Globals.usuario.email);
+        Carrera carrera = new Carrera(tipoCarrera, distanciaCarrera, lugarCarrera, fechaCarrera, Globals.usuario.id);
 
         // Guardar los datos de la carrera en la base de datos
         carrerasRef.child(carreraId).setValue(carrera)
