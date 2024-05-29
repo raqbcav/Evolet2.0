@@ -9,5 +9,16 @@ public class Entrenamiento {
     public double km;
     public int nSemana;
 
+    public Entrenamiento() {
+    }
 
+    public Entrenamiento(String id, String idDeportista, String idEntrenador, String fecha, String sesion, double km, int nSemana) {
+        this.id = id;
+        this.idDeportista = idDeportista;
+        this.idEntrenador = idEntrenador;
+        this.fecha = fecha;
+        this.sesion = sesion;
+        this.km = km;
+        this.nSemana = nSemana;
+    }
 }
