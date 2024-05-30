@@ -16,8 +16,10 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.evolet20.MainActivity;
+import com.example.evolet20.Model.Carrera;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
+import com.example.evolet20.Static.Globals;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -97,9 +99,14 @@ public class RegisterActivity extends AppCompatActivity {
                 if (exists) {
                     Snackbar.make(view, "Ya existe un usuario con ese email.", Snackbar.LENGTH_LONG).show();
                 } else {
+                    // Generar una nueva clave única para el usuario
+                    String idUsuario = mDatabase.child("usuario").push().getKey();
+
                     String hashPass = BCrypt.hashpw(newPass, BCrypt.gensalt());
                     Usuario usuario = new Usuario(id, perfil, nombre, email, hashPass);
-                    mDatabase.child("usuarios").child(UUID.randomUUID().toString()).setValue(usuario)
+
+                    mDatabase.child("usuario").child(idUsuario).setValue(usuario)
+
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -120,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void checkUserExists(String email, final OnUserCheckListener listener) {
-        mDatabase.child("usuarios").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("usuario").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listener.onCheck(dataSnapshot.exists());

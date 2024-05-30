@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validateUser(View view, String email, String password) {
-        mDatabase.child("usuarios").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("usuario").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
