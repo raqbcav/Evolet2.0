@@ -6,10 +6,9 @@
     android:background="@color/fondo"
     tools:context=".Fragments.InicioFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <View
+        android:id="@+id/graphView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/inicio" />
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
