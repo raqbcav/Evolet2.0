@@ -16,7 +16,12 @@ import com.example.evolet20.Fragments.CarrerasFragment;
 import com.example.evolet20.Fragments.CiclosFragment;
 import com.example.evolet20.Fragments.InicioFragment;
 import com.example.evolet20.Fragments.TuFragment;
+import com.example.evolet20.Static.Globals;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         replaceFragment(new InicioFragment());
+
+        // Obtener la fecha actual yla semana del año
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Globals.fechaActual = dateFormat.format(calendar.getTime());
+        Globals.semanaActual = calendar.get(Calendar.WEEK_OF_YEAR);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(item -> {

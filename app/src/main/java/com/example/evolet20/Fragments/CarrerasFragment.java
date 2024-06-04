@@ -109,6 +109,14 @@ public class CarrerasFragment extends Fragment {
         return mView;
     }
 
+    private void selectDiaSemana(View view){
+        etFiltroFecha = view.findViewById(R.id.etFiltroFecha);
+        filtroCarrera.fecha = Globals.fechaActual;
+
+        // Mostrar la fecha actual en el EditText
+        etFiltroFecha.setText(Globals.fechaActual);
+    }
+
     private final DatePickerDialog.OnDateSetListener dateSetListenerFiltro = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -147,6 +155,7 @@ public class CarrerasFragment extends Fragment {
         Spinner spDeportista = view.findViewById(R.id.spDeportista);
         if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
             spDeportista.setVisibility(View.GONE);
+            selectDiaSemana(view);
             filtroCarrera.idUsuario = Globals.usuario.id;
             rellenarListView(view, filtroCarrera);
         } else {
@@ -158,7 +167,7 @@ public class CarrerasFragment extends Fragment {
 
                     // Iterar sobre los usuarios y agregarlos a la lista
                     for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
-                        String idUsuario = usuarioSnapshot.getKey();
+                        String idUsuario = usuarioSnapshot.child("id").getValue(String.class);
                         String nombreUsuario = usuarioSnapshot.child("nombreUsuario").getValue(String.class);
                         if (nombreUsuario != null) {
                             Usuario usuario = new Usuario();
@@ -180,6 +189,7 @@ public class CarrerasFragment extends Fragment {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Usuario usuarioSeleccionado = (Usuario) parent.getItemAtPosition(position);
                             filtroCarrera.idUsuario = usuarioSeleccionado.id;
+                            selectDiaSemana(view);
                             // Cargamos los datos de las carreras del usuario seleccionado
                             rellenarListView(view, filtroCarrera); // Pasamos la referencia a la vista
                         }

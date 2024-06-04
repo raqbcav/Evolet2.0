@@ -18,12 +18,14 @@ public class ViewPagerAdapater extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        Fragment fragment;
         switch (position){
-            case 0: return new HoyTab();
-            case 1: return new SemanaTab();
-            case 2: return new MesTab();
-            default: return new HoyTab();
+            case 0: fragment = new HoyTab();
+            case 1: fragment = new SemanaTab();
+            case 2: fragment = new MesTab();
+            default: fragment = new HoyTab();
         }
+        return fragment;
     }
 
     @Override
