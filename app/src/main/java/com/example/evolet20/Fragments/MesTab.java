@@ -67,8 +67,6 @@ public class MesTab extends Fragment {
             }
         });
 
-        customizeCalendar(calendarView);
-
         return mView;
     }
 
@@ -77,8 +75,6 @@ public class MesTab extends Fragment {
 
         final List<Carrera> carreras = new ArrayList<>();
         final List<Entrenamiento> entrenamientos = new ArrayList<>();
-
-
 
         mDatabase.child("carrera").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -137,25 +133,5 @@ public class MesTab extends Fragment {
                 Snackbar.make(mView, "Error al leer los datos de Firebase: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void customizeCalendar(CalendarView calendarView) {
-        // Obtener la vista raíz del CalendarView
-        ViewGroup root = (ViewGroup) calendarView.getChildAt(0);
-
-        // Iterar sobre todas las celdas del calendario
-        for (int i = 0; i < root.getChildCount(); i++) {
-            View child = root.getChildAt(i);
-
-            if (child instanceof TextView) {
-                TextView dayTextView = (TextView) child;
-                int dayOfMonth = Integer.parseInt(dayTextView.getText().toString());
-
-                // Personalizar el color de fondo de ciertos días (por ejemplo, los días 1, 5 y 10)
-                if (dayOfMonth == 1 || dayOfMonth == 5 || dayOfMonth == 10) {
-                    dayTextView.setTextColor(Color.RED);
-                }
-            }
-        }
     }
 }
