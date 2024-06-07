@@ -109,7 +109,7 @@ public class CarrerasFragment extends Fragment {
         return mView;
     }
 
-    private void selectDiaSemana(View view){
+    private void selectDiaSemana(View view) {
         etFiltroFecha = view.findViewById(R.id.etFiltroFecha);
         filtroCarrera.fecha = Globals.fechaActual;
 
@@ -157,7 +157,7 @@ public class CarrerasFragment extends Fragment {
             spDeportista.setVisibility(View.GONE);
             selectDiaSemana(view);
             filtroCarrera.idUsuario = Globals.usuario.id;
-            rellenarListView(view, filtroCarrera);
+            rellenarListView(mView, filtroCarrera);
         } else {
             // Agregar un listener para obtener los datos de los usuarios
             mDatabase.child("usuario").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -191,7 +191,7 @@ public class CarrerasFragment extends Fragment {
                             filtroCarrera.idUsuario = usuarioSeleccionado.id;
                             selectDiaSemana(view);
                             // Cargamos los datos de las carreras del usuario seleccionado
-                            rellenarListView(view, filtroCarrera); // Pasamos la referencia a la vista
+                            rellenarListView(mView, filtroCarrera); // Pasamos la referencia a la vista
                         }
 
                         @Override
@@ -221,20 +221,6 @@ public class CarrerasFragment extends Fragment {
             query = query.orderByChild("idUsuario").equalTo(filtroCarrera.idUsuario);
         }
 
-        // Aplicar filtro por tipo si no es null ni una cadena vacía
-        if (filtroCarrera.tipo != null && !filtroCarrera.tipo.isEmpty()) {
-            query = query.orderByChild("tipo").equalTo(filtroCarrera.tipo);
-        }
-
-        // Aplicar filtro por distancia si no es null ni una cadena vacía
-        if (filtroCarrera.distancia != null && !filtroCarrera.distancia.isEmpty()) {
-            query = query.orderByChild("distancia").equalTo(filtroCarrera.distancia);
-        }
-
-        // Aplicar filtro por fecha si no es null ni una cadena vacía
-        if (filtroCarrera.fecha != null && !filtroCarrera.fecha.isEmpty()) {
-            query = query.orderByChild("fecha").equalTo(filtroCarrera.fecha);
-        }
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -244,15 +230,23 @@ public class CarrerasFragment extends Fragment {
                 // Iterar sobre los datos de las carreras y agregarlos a la lista
                 for (DataSnapshot carreraSnapshot : dataSnapshot.getChildren()) {
                     String tipo = carreraSnapshot.child("tipo").getValue(String.class);
-                    String distancia = carreraSnapshot.child("distancia").getValue(String.class);
+                    String distancia = carreraSnapshot.child("distancia").getValue(String.class).replace("K", "");
                     String lugar = carreraSnapshot.child("lugar").getValue(String.class);
                     String fecha = carreraSnapshot.child("fecha").getValue(String.class);
-                    listCarreras.add(new Carrera(tipo, distancia, lugar, fecha, filtroCarrera.idUsuario));
+                    boolean filtroOK = filtroMultiple(tipo, distancia, fecha, filtroCarrera);
+                    if (filtroOK) {
+                        listCarreras.add(new Carrera(tipo, distancia, lugar, fecha, filtroCarrera.idUsuario));
+                    }
                 }
-
                 ListView listView = view.findViewById(R.id.lvCarreras);
-                CarreraAdapter adapter = new CarreraAdapter(getContext(), listCarreras);
-                listView.setAdapter(adapter);
+                if (listView != null) {
+                    if (!listCarreras.isEmpty()) {
+                        CarreraAdapter adapter = new CarreraAdapter(getContext(), listCarreras);
+                        listView.setAdapter(adapter);
+                    } else {
+                        listView.setAdapter(null);
+                    }
+                }
             }
 
             @Override
@@ -263,6 +257,19 @@ public class CarrerasFragment extends Fragment {
         });
     }
 
+
+    private boolean filtroMultiple(String tipo, String distancia, String fecha, Carrera filtroCarrera) {
+        if (filtroCarrera.tipo != null && !filtroCarrera.tipo.equalsIgnoreCase(tipo)) {
+            return false;
+        }
+        if (filtroCarrera.distancia != null && !filtroCarrera.distancia.equalsIgnoreCase(distancia)) {
+            return false;
+        }
+        if (filtroCarrera.fecha != null && !filtroCarrera.fecha.equalsIgnoreCase(fecha)) {
+            return false;
+        }
+        return true;
+    }
 
     private void rellenarSpinners(View view) {
         // Obteniendo referencias a los Spinners
@@ -289,7 +296,7 @@ public class CarrerasFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Manejar la selección del tipo de carrera en el filtro
                 filtroCarrera.tipo = (String) parent.getItemAtPosition(position);
-                rellenarListView(view, filtroCarrera);
+                rellenarListView(mView, filtroCarrera);
             }
 
             @Override
@@ -304,7 +311,7 @@ public class CarrerasFragment extends Fragment {
                 // Manejar la selección de la distancia en el filtro
                 String distanciaSeleccionada = (String) parent.getItemAtPosition(position);
                 filtroCarrera.distancia = distanciaSeleccionada.replace("K", "");
-                rellenarListView(view, filtroCarrera);
+                rellenarListView(mView, filtroCarrera);
             }
 
             @Override
@@ -341,6 +348,7 @@ public class CarrerasFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         // Éxito al registrar la carrera
                         Snackbar.make(view, "Carrera registrada con éxito", Snackbar.LENGTH_LONG).show();
+                        rellenarListView(mView, filtroCarrera);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
