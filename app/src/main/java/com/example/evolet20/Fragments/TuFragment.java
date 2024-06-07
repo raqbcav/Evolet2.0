@@ -1,6 +1,7 @@
 package com.example.evolet20.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,13 +16,20 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.evolet20.Login.LoginActivity;
+import com.example.evolet20.Login.RegisterActivity;
+import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
 import com.example.evolet20.Static.Globals;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -55,8 +63,6 @@ public class TuFragment extends Fragment {
 
         etNombre.setText(Globals.usuario.nombre);
         etEmail.setText(Globals.usuario.email);
-        etPass.setText(Globals.usuario.pass);
-        etPass2.setText(Globals.usuario.pass);
 
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,9 +101,10 @@ public class TuFragment extends Fragment {
                 }
 
                 String hashPass = "";
-                if (!pass.equalsIgnoreCase("") && !pass2.equalsIgnoreCase("")){
+                if (!pass.equalsIgnoreCase("") && !pass2.equalsIgnoreCase("")) {
                     hashPass = BCrypt.hashpw(pass, BCrypt.gensalt());
                 }
+
                 updateUsuario(view, nombre, email, hashPass);
                 btnEditar.setVisibility(View.VISIBLE);
                 btnGuardar.setVisibility(View.GONE);
@@ -112,28 +119,54 @@ public class TuFragment extends Fragment {
     }
 
     private void updateUsuario(View view, String nombre, String email, String pass) {
-        DatabaseReference usuarioRef = mDatabase.child("usuario").child(Globals.usuario.id);
-        Map<String, Object> actualizacionDatos = new HashMap<>();
-        actualizacionDatos.put("nombre", nombre);
-        actualizacionDatos.put("email", email);
-        if (!pass.equalsIgnoreCase("")){
-            actualizacionDatos.put("pass", pass);
-        }
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        // Crear un query para buscar el usuario por su id
+        Query query = mDatabase.child("usuario").orderByChild("id").equalTo(Globals.usuario.id);
 
-        usuarioRef.updateChildren(actualizacionDatos)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Snackbar.make(view, "Datos actualizados correctamente", Snackbar.LENGTH_LONG).show();
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
+                        Usuario usuario = usuarioSnapshot.getValue(Usuario.class);
+                        if (usuario != null) {
+                            usuario.nombre = nombre;
+                            usuario.email = email;
+                            if (!pass.equalsIgnoreCase("")){
+                                usuario.pass = pass;
+                            }
+
+                            // Actualizar el usuario en Firebase
+                            usuarioSnapshot.getRef().setValue(usuario)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Manejo del éxito de la actualización
+                                            Snackbar.make(view, "Datos actualizados correctamente", Snackbar.LENGTH_LONG).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Manejo del fallo de la actualización
+                                            Snackbar.make(view, "Error al actualizar los datos: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(view, "Error al actualizar los datos: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                });
+                } else {
+                    Snackbar.make(view, "Usuario no encontrado.", Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar el error en caso de que falle la lectura de datos
+                Snackbar.make(view, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
+
 
     private boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
