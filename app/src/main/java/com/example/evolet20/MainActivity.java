@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Obtener la fecha actual yla semana del año
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Globals.fechaActual = dateFormat.format(calendar.getTime());
+        Globals.fechaActual = Globals.dateToLocalDate(calendar.getTime());
         Globals.semanaActual = calendar.get(Calendar.WEEK_OF_YEAR);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);

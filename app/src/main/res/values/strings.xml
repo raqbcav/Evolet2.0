@@ -72,4 +72,7 @@
     <string name="total_distancia">Total distancia:</string>
     <string name="total_carreras">Total Carreras:</string>
     <string name="enviar">Enviar</string>
+    <string name="total_distancia_entrenamientos">Total Distancia Entrenamientos:</string>
+    <string name="total_distancia_carreras">Total Distancia Carreras:</string>
+    <string name="total_entrenamientos">Total Entrenamientos:</string>
 </resources>

@@ -111,10 +111,10 @@ public class CarrerasFragment extends Fragment {
 
     private void selectDiaSemana(View view) {
         etFiltroFecha = view.findViewById(R.id.etFiltroFecha);
-        filtroCarrera.fecha = Globals.fechaActual;
+        filtroCarrera.fecha = Globals.LocalDateToText(Globals.fechaActual);
 
         // Mostrar la fecha actual en el EditText
-        etFiltroFecha.setText(Globals.fechaActual);
+        etFiltroFecha.setText(Globals.LocalDateToText(Globals.fechaActual));
     }
 
     private final DatePickerDialog.OnDateSetListener dateSetListenerFiltro = new DatePickerDialog.OnDateSetListener() {

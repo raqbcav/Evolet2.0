@@ -3,19 +3,40 @@ package com.example.evolet20.Fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.evolet20.Model.Carrera;
+import com.example.evolet20.Model.Entrenamiento;
 import com.example.evolet20.R;
+import com.example.evolet20.Static.Globals;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class MesTab extends Fragment {
 
-
+    private View mView;
+    private DatabaseReference mDatabase;
+    private CalendarView calendarView;
+    private EditText etTotalDias, etDistanciaE, etDistanciaC, etTotalCarreras;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,22 +47,96 @@ public class MesTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_mes_tab, container, false);
+        mView = inflater.inflate(R.layout.fragment_mes_tab, container, false);
 
-        CalendarView calendarView = view.findViewById(R.id.calendarView);
+        calendarView = mView.findViewById(R.id.calendarView);
+        etTotalDias = mView.findViewById(R.id.etTotalDias);
+        etDistanciaE = mView.findViewById(R.id.etDistanciaE);
+        etDistanciaC = mView.findViewById(R.id.etDistanciaC);
+        etTotalCarreras = mView.findViewById(R.id.etTotalCarreras);
+
+        cargarDatos();
 
         // Escuchar los eventos de selección de fecha
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // Manejar la fecha seleccionada
-
+                Globals.fechaSeleccionadaMes = LocalDate.of(year, month + 1, dayOfMonth);
+                Globals.viewPager2.setCurrentItem(0);
             }
         });
 
         customizeCalendar(calendarView);
 
-        return view;
+        return mView;
+    }
+
+    private void cargarDatos() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        final List<Carrera> carreras = new ArrayList<>();
+        final List<Entrenamiento> entrenamientos = new ArrayList<>();
+
+
+
+        mDatabase.child("carrera").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Carrera carrera = snapshot.getValue(Carrera.class);
+                    carreras.add(carrera);
+                }
+
+                int totalCarreras = 0;
+                double distanciaCarreras = 0;
+
+                for (Carrera carrera : carreras) {
+                    LocalDate fecha = Globals.textToLocalDate(carrera.fecha);
+                    if (fecha.getMonth() == LocalDate.now().getMonth()){
+                        totalCarreras ++;
+                        distanciaCarreras += Double.parseDouble(carrera.distancia.replace("K", ""));
+                    }
+                }
+
+                etTotalCarreras.setText(String.valueOf(totalCarreras));
+                etDistanciaC.setText(String.valueOf(distanciaCarreras));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Snackbar.make(mView, "Error al leer los datos de Firebase: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        mDatabase.child("entrenamiento").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Entrenamiento entrenamiento = snapshot.getValue(Entrenamiento.class);
+                    entrenamientos.add(entrenamiento);
+                }
+
+                int totalDias = 0;
+                double distanciaEntrenamientos = 0;
+
+                for (Entrenamiento entrenamiento : entrenamientos) {
+                    LocalDate fecha = Globals.textToLocalDate(entrenamiento.fecha);
+                    if (fecha.getMonth() == LocalDate.now().getMonth()){
+                        totalDias ++;
+                        distanciaEntrenamientos += entrenamiento.km;
+                    }
+                }
+
+                etTotalDias.setText(String.valueOf(totalDias));
+                etDistanciaE.setText(String.valueOf(distanciaEntrenamientos));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Snackbar.make(mView, "Error al leer los datos de Firebase: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void customizeCalendar(CalendarView calendarView) {
@@ -58,7 +153,7 @@ public class MesTab extends Fragment {
 
                 // Personalizar el color de fondo de ciertos días (por ejemplo, los días 1, 5 y 10)
                 if (dayOfMonth == 1 || dayOfMonth == 5 || dayOfMonth == 10) {
-                    dayTextView.setBackgroundColor(Color.RED);
+                    dayTextView.setTextColor(Color.RED);
                 }
             }
         }

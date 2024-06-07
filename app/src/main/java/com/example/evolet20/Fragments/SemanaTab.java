@@ -118,7 +118,7 @@ public class SemanaTab extends Fragment {
         etFiltroSemana = view.findViewById(R.id.etFiltroSemana);
 
         // Mostrar la fecha actual en el EditText
-        etFiltroFecha.setText(Globals.fechaActual);
+        etFiltroFecha.setText(Globals.LocalDateToText(Globals.fechaActual));
         etFiltroSemana.setText("Semana " + Globals.semanaActual);
     }
 

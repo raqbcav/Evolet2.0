@@ -52,13 +52,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="@string/total_d_as" />
+                    android:text="@string/total_entrenamientos" />
 
                 <EditText
-                    android:id="@+id/etTiempo"
+                    android:id="@+id/etTotalDias"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:enabled="false"
                     android:gravity="end" />
 
             </LinearLayout>
@@ -73,13 +74,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:text="@string/total_distancia" />
+                    android:text="@string/total_distancia_entrenamientos" />
 
                 <EditText
-                    android:id="@+id/etDistancia"
+                    android:id="@+id/etDistanciaE"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:enabled="false"
                     android:gravity="end" />
 
             </LinearLayout>
@@ -97,10 +99,33 @@
                     android:text="@string/total_carreras" />
 
                 <EditText
-                    android:id="@+id/etVelocidad"
+                    android:id="@+id/etTotalCarreras"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:enabled="false"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/total_distancia_carreras" />
+
+                <EditText
+                    android:id="@+id/etDistanciaC"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="false"
                     android:gravity="end" />
 
             </LinearLayout>
