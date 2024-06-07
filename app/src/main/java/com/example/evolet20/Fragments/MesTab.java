@@ -73,8 +73,8 @@ public class MesTab extends Fragment {
     private void cargarDatos() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        final List<Carrera> carreras = new ArrayList<>();
-        final List<Entrenamiento> entrenamientos = new ArrayList<>();
+        List<Carrera> carreras = new ArrayList<>();
+        List<Entrenamiento> entrenamientos = new ArrayList<>();
 
         mDatabase.child("carrera").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
