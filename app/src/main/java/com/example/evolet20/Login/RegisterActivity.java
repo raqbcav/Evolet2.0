@@ -33,6 +33,11 @@ import java.util.UUID;
 public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
+    private Button btnRegister;
+    private Spinner spPerfil;
+
+    private EditText etNombre, etEmail, etPass, etPass2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +45,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Button btnRegister = findViewById(R.id.btnRegister);
-        Spinner spPerfil = findViewById(R.id.spPerfil);
+        btnRegister = findViewById(R.id.btnRegister);
+        spPerfil = findViewById(R.id.spPerfil);
+        etNombre = findViewById(R.id.etNombre);
+        etEmail = findViewById(R.id.etEmail);
+        etPass = findViewById(R.id.etPass);
+        etPass2 = findViewById(R.id.etPass2);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.perfiles, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spPerfil.setAdapter(adapter);
+        setSpinner();
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,13 +66,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void registrarUsuario(View view) {
-        Spinner spPerfil = findViewById(R.id.spPerfil);
-        EditText etNombre = findViewById(R.id.etNombre);
-        EditText etEmail = findViewById(R.id.etEmail);
-        EditText etPass = findViewById(R.id.etPass);
-        EditText etPass2 = findViewById(R.id.etPass2);
+    private void setSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.perfiles, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPerfil.setAdapter(adapter);
+    }
 
+    private void registrarUsuario(View view) {
         String id = UUID.randomUUID().toString();
         String perfil = spPerfil.getSelectedItem().toString();
         String nombre = etNombre.getText().toString();
@@ -131,8 +138,6 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error if needed
-                String error = databaseError.getMessage();
-                String error2 = databaseError.getDetails();
             }
         });
     }

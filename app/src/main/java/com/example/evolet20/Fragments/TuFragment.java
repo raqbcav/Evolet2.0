@@ -33,6 +33,9 @@ import org.mindrot.jbcrypt.BCrypt;
 public class TuFragment extends Fragment {
     private DatabaseReference mDatabase;
     private ConnectivityManager connectivityManager;
+    
+    private Button btnGuardar, btnEditar;
+    private EditText etNombre, etEmail, etPass, etPass2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +51,12 @@ public class TuFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Button btnGuardar = view.findViewById(R.id.btnGuardar);
-        Button btnEditar = view.findViewById(R.id.btnEditar);
-        EditText etNombre = view.findViewById(R.id.etNombre);
-        EditText etEmail = view.findViewById(R.id.etEmail);
-        EditText etPass = view.findViewById(R.id.etPass);
-        EditText etPass2 = view.findViewById(R.id.etPass2);
+        btnGuardar = view.findViewById(R.id.btnGuardar);
+        btnEditar = view.findViewById(R.id.btnEditar);
+        etNombre = view.findViewById(R.id.etNombre);
+        etEmail = view.findViewById(R.id.etEmail);
+        etPass = view.findViewById(R.id.etPass);
+        etPass2 = view.findViewById(R.id.etPass2);
 
         etNombre.setText(Globals.usuario.nombre);
         etEmail.setText(Globals.usuario.email);
@@ -61,12 +64,7 @@ public class TuFragment extends Fragment {
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnEditar.setVisibility(View.GONE);
-                btnGuardar.setVisibility(View.VISIBLE);
-                etNombre.setEnabled(true);
-                etEmail.setEnabled(true);
-                etPass.setEnabled(true);
-                etPass2.setEnabled(true);
+                enableCampos(true);
             }
         });
 
@@ -100,16 +98,20 @@ public class TuFragment extends Fragment {
                 }
 
                 updateUsuario(view, nombre, email, hashPass);
-                btnEditar.setVisibility(View.VISIBLE);
-                btnGuardar.setVisibility(View.GONE);
-                etNombre.setEnabled(false);
-                etEmail.setEnabled(false);
-                etPass.setEnabled(false);
-                etPass2.setEnabled(false);
+                enableCampos(false);
             }
         });
 
         return view;
+    }
+
+    private void enableCampos(boolean enabled) {
+        btnEditar.setVisibility(enabled ? View.GONE : View.VISIBLE);
+        btnGuardar.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        etNombre.setEnabled(enabled);
+        etEmail.setEnabled(enabled);
+        etPass.setEnabled(enabled);
+        etPass2.setEnabled(enabled);
     }
 
     private void updateUsuario(View view, String nombre, String email, String pass) {

@@ -15,9 +15,6 @@ public class Globals {
     public static Usuario usuario;
     public static int semanaActual;
     public static LocalDate fechaActual;
-    public static LocalDate fechaSeleccionadaMes;
-    public static TabLayout tabLayout;
-    public static ViewPager2 viewPager2;
 
     public static LocalDate textToLocalDate(String fecha){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

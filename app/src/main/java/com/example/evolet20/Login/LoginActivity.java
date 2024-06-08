@@ -29,6 +29,9 @@ import org.mindrot.jbcrypt.BCrypt;
 public class LoginActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
+    private Button btnLogin;
+    private EditText etEmail, etPass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,15 +39,15 @@ public class LoginActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Button btnLogin = findViewById(R.id.btnLogin);
-        EditText etEmail = findViewById(R.id.etEmail);
-        EditText etPassword = findViewById(R.id.etPass);
+        btnLogin = findViewById(R.id.btnLogin);
+        etEmail = findViewById(R.id.etEmail);
+        etPass = findViewById(R.id.etPass);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+                String password = etPass.getText().toString();
 
                 if (isNetworkAvailable()) {
                     if (isValidEmail(email)) {

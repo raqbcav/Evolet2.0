@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.evolet20.R;
 
-public class HoyTab extends Fragment {
+public class HoyFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

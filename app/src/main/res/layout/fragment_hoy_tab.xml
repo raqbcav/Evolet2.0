@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/fondo"
     android:orientation="vertical"
-    tools:context=".Fragments.HoyTab">
+    tools:context=".Fragments.HoyFragment">
 
     <Spinner
         android:id="@+id/spDeportista"

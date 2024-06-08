@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public class SemanaTab extends Fragment {
+public class SemanaFragment extends Fragment {
 
     private View mView;
     private DatabaseReference mDatabase;
@@ -102,7 +102,7 @@ public class SemanaTab extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int semana = Integer.parseInt(etFiltroSemana.getText().toString());
+                int semana = Integer.parseInt(etFiltroSemana.getText().toString().replace("Semana ", ""));
                 List<Entrenamiento> entrenamientos = new ArrayList<>();
 
                 List<LocalDate> diasSemana = getSemanaCompleta(semana);
