@@ -17,8 +17,6 @@ import com.example.evolet20.MainActivity;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
 import com.example.evolet20.Static.Globals;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -2,13 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/inicio"
-        android:title="@string/inicio"
-        android:icon="@drawable/ic_home_black_24dp" />
+        android:id="@+id/hoy"
+        android:title="@string/hoy"
+        android:icon="@drawable/ic_hoy" />
     <item
-        android:id="@+id/ciclos"
-        android:title="@string/ciclos"
-        android:icon="@drawable/ic_dashboard_black_24dp" />
+        android:id="@+id/semana"
+        android:title="@string/semana"
+        android:icon="@drawable/ic_semana" />
+    <item
+        android:id="@+id/mes"
+        android:title="@string/mes"
+        android:icon="@drawable/ic_mes" />
     <item
         android:id="@+id/carreras"
         android:title="@string/carreras"

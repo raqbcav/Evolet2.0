@@ -1,12 +1,7 @@
 package com.example.evolet20.Fragments;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import com.example.evolet20.Login.LoginActivity;
-import com.example.evolet20.Login.RegisterActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.evolet20.Model.Entrenamiento;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
@@ -33,8 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 public class SemanaTab extends Fragment {
@@ -95,7 +88,7 @@ public class SemanaTab extends Fragment {
         etDomingoKM = mView.findViewById(R.id.etDomingoKM);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        spVisible(mView);
+        spVisible();
 
         ibFiltroFecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,16 +226,16 @@ public class SemanaTab extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
         etFiltroFecha.setText(sdf.format(calendarFiltro.getTime()));
         semanaSelect = calendarFiltro.get(Calendar.WEEK_OF_YEAR);
-        rellenarDatos(mView, Globals.usuario, semanaSelect);
+        rellenarDatos(Globals.usuario, semanaSelect);
     }
 
-    private void spVisible(View view) {
+    private void spVisible() {
         if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
             spDeportista.setVisibility(View.GONE);
             btnGuardar.setVisibility(View.GONE);
-            selectDiaSemana(view);
+            selectDiaSemana();
             semanaSelect = Globals.semanaActual;
-            rellenarDatos(view, Globals.usuario, semanaSelect);
+            rellenarDatos(Globals.usuario, semanaSelect);
         } else {
             // Agregar un listener para obtener los datos de los usuarios
             mDatabase.child("usuario").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -273,8 +266,8 @@ public class SemanaTab extends Fragment {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Usuario usuarioSeleccionado = (Usuario) parent.getItemAtPosition(position);
-                            selectDiaSemana(view);
-                            rellenarDatos(view, usuarioSeleccionado, semanaSelect);
+                            selectDiaSemana();
+                            rellenarDatos(usuarioSeleccionado, semanaSelect);
                         }
 
                         @Override
@@ -287,22 +280,22 @@ public class SemanaTab extends Fragment {
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     // Manejar el error en caso de que falle la lectura de datos
-                    Snackbar.make(view, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mView, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
                 }
             });
         }
     }
 
-    private void selectDiaSemana(View view) {
-        etFiltroFecha = view.findViewById(R.id.etFiltroFecha);
-        etFiltroSemana = view.findViewById(R.id.etFiltroSemana);
+    private void selectDiaSemana() {
+        etFiltroFecha = mView.findViewById(R.id.etFiltroFecha);
+        etFiltroSemana = mView.findViewById(R.id.etFiltroSemana);
 
         // Mostrar la fecha actual en el EditText
         etFiltroFecha.setText(Globals.LocalDateToText(Globals.fechaActual));
         etFiltroSemana.setText("Semana " + Globals.semanaActual);
     }
 
-    private void rellenarDatos(View view, Usuario usuario, int semana) {
+    private void rellenarDatos(Usuario usuario, int semana) {
         mDatabase.child("entrenamiento").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -352,7 +345,7 @@ public class SemanaTab extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Manejar el error en caso de que falle la lectura de datos
-                Snackbar.make(view, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mView, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
                 esNuevo = true;
             }
         });

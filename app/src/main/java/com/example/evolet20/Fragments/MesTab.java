@@ -1,17 +1,14 @@
 package com.example.evolet20.Fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.evolet20.Model.Carrera;
 import com.example.evolet20.Model.Entrenamiento;
@@ -25,11 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class MesTab extends Fragment {
 
@@ -62,8 +56,7 @@ public class MesTab extends Fragment {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 // Manejar la fecha seleccionada
-                Globals.fechaSeleccionadaMes = LocalDate.of(year, month + 1, dayOfMonth);
-                Globals.viewPager2.setCurrentItem(0);
+
             }
         });
 

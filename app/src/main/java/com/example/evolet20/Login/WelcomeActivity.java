@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.evolet20.MainActivity;
 import com.example.evolet20.R;
 
 public class WelcomeActivity extends AppCompatActivity {

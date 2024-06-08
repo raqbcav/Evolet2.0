@@ -3,7 +3,6 @@ package com.example.evolet20.Static;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.evolet20.Model.Usuario;
-import com.example.evolet20.ViewPagerAdapater;
 import com.google.android.material.tabs.TabLayout;
 
 import java.time.LocalDate;
@@ -19,7 +18,6 @@ public class Globals {
     public static LocalDate fechaSeleccionadaMes;
     public static TabLayout tabLayout;
     public static ViewPager2 viewPager2;
-    public static ViewPagerAdapater viewPagerAdapater;
 
     public static LocalDate textToLocalDate(String fecha){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -15,14 +15,10 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.evolet20.MainActivity;
-import com.example.evolet20.Model.Carrera;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
-import com.example.evolet20.Static.Globals;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +29,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;

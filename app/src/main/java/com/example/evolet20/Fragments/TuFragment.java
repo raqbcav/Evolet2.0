@@ -1,7 +1,6 @@
 package com.example.evolet20.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.evolet20.Login.LoginActivity;
-import com.example.evolet20.Login.RegisterActivity;
 import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
 import com.example.evolet20.Static.Globals;
@@ -32,9 +29,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.mindrot.jbcrypt.BCrypt;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TuFragment extends Fragment {
     private DatabaseReference mDatabase;
