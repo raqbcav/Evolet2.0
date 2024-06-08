@@ -49,6 +49,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/hint"
             android:src="@drawable/ic_calendar_white" />
+
+
     </LinearLayout>
 
     <!-- Línea 1 -->

@@ -72,170 +72,178 @@ public class SemanaFragment extends Fragment {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_semana, container, false);
 
-        spDeportista = mView.findViewById(R.id.spDeportista);
-        btnGuardar = mView.findViewById(R.id.btnGuardar);
-        ibFiltroFecha = mView.findViewById(R.id.ibFiltroFecha);
+        try {
+            spDeportista = mView.findViewById(R.id.spDeportista);
+            btnGuardar = mView.findViewById(R.id.btnGuardar);
+            ibFiltroFecha = mView.findViewById(R.id.ibFiltroFecha);
 
-        idLunes = mView.findViewById(R.id.idLunes);
-        idMartes = mView.findViewById(R.id.idMartes);
-        idMiercoles = mView.findViewById(R.id.idMiercoles);
-        idJueves = mView.findViewById(R.id.idJueves);
-        idViernes = mView.findViewById(R.id.idViernes);
-        idSabado = mView.findViewById(R.id.idSabado);
-        idDomingo = mView.findViewById(R.id.idDomingo);
+            idLunes = mView.findViewById(R.id.idLunes);
+            idMartes = mView.findViewById(R.id.idMartes);
+            idMiercoles = mView.findViewById(R.id.idMiercoles);
+            idJueves = mView.findViewById(R.id.idJueves);
+            idViernes = mView.findViewById(R.id.idViernes);
+            idSabado = mView.findViewById(R.id.idSabado);
+            idDomingo = mView.findViewById(R.id.idDomingo);
 
-        etLunes = mView.findViewById(R.id.etLunes);
-        etMartes = mView.findViewById(R.id.etMartes);
-        etMiercoles = mView.findViewById(R.id.etMiercoles);
-        etJueves = mView.findViewById(R.id.etJueves);
-        etViernes = mView.findViewById(R.id.etViernes);
-        etSabado = mView.findViewById(R.id.etSabado);
-        etDomingo = mView.findViewById(R.id.etDomingo);
+            etLunes = mView.findViewById(R.id.etLunes);
+            etMartes = mView.findViewById(R.id.etMartes);
+            etMiercoles = mView.findViewById(R.id.etMiercoles);
+            etJueves = mView.findViewById(R.id.etJueves);
+            etViernes = mView.findViewById(R.id.etViernes);
+            etSabado = mView.findViewById(R.id.etSabado);
+            etDomingo = mView.findViewById(R.id.etDomingo);
 
-        etLunesKM = mView.findViewById(R.id.etLunesKM);
-        etMartesKM = mView.findViewById(R.id.etMartesKM);
-        etMiercolesKM = mView.findViewById(R.id.etMiercolesKM);
-        etJuevesKM = mView.findViewById(R.id.etJuevesKM);
-        etViernesKM = mView.findViewById(R.id.etViernesKM);
-        etSabadoKM = mView.findViewById(R.id.etSabadoKM);
-        etDomingoKM = mView.findViewById(R.id.etDomingoKM);
+            etLunesKM = mView.findViewById(R.id.etLunesKM);
+            etMartesKM = mView.findViewById(R.id.etMartesKM);
+            etMiercolesKM = mView.findViewById(R.id.etMiercolesKM);
+            etJuevesKM = mView.findViewById(R.id.etJuevesKM);
+            etViernesKM = mView.findViewById(R.id.etViernesKM);
+            etSabadoKM = mView.findViewById(R.id.etSabadoKM);
+            etDomingoKM = mView.findViewById(R.id.etDomingoKM);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        spVisible();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            spVisible();
 
-        ibFiltroFecha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(getContext(), dateSetListenerFiltro,
-                        calendarFiltro.get(Calendar.YEAR), calendarFiltro.get(Calendar.MONTH),
-                        calendarFiltro.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+            ibFiltroFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(getContext(), dateSetListenerFiltro,
+                            calendarFiltro.get(Calendar.YEAR), calendarFiltro.get(Calendar.MONTH),
+                            calendarFiltro.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            });
 
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int semana = Integer.parseInt(etFiltroSemana.getText().toString().replace("Semana ", ""));
-                List<LocalDate> diasSemana = getSemanaCompleta(semana);
-                List<Entrenamiento> entrenamientos = new ArrayList<>();
+            btnGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveSemana(view);
+                }
+            });
+        } catch (Exception e) {
+            Snackbar.make(mView, "Ha ocurrido un error inesperado: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
 
-                String lunes = etLunes.getText().toString();
-                String lunesKM = etLunesKM.getText().toString();
-                String martes = etMartes.getText().toString();
-                String martesKM = etMartesKM.getText().toString();
-                String miercoles = etMiercoles.getText().toString();
-                String miercolesKM = etMiercolesKM.getText().toString();
-                String jueves = etJueves.getText().toString();
-                String juevesKM = etJuevesKM.getText().toString();
-                String viernes = etViernes.getText().toString();
-                String viernesKM = etViernesKM.getText().toString();
-                String sabado = etSabado.getText().toString();
-                String sabadoKM = etSabadoKM.getText().toString();
-                String domingo = etDomingo.getText().toString();
-                String domingoKM = etDomingoKM.getText().toString();
+        return mView;
+    }
 
-                if (lunes.isEmpty() && lunesKM.isEmpty() &&
-                        martes.isEmpty() && martesKM.isEmpty() &&
-                        miercoles.isEmpty() && miercolesKM.isEmpty() &&
-                        jueves.isEmpty() && juevesKM.isEmpty() &&
-                        viernes.isEmpty() && viernesKM.isEmpty() &&
-                        sabado.isEmpty() && sabadoKM.isEmpty() &&
-                        domingo.isEmpty() && domingoKM.isEmpty()) {
-                    Snackbar.make(view, "Debe rellenar los campos de al menos 1 día.", Snackbar.LENGTH_LONG).show();
+    private void saveSemana(View view) {
+        int semana = Integer.parseInt(etFiltroSemana.getText().toString().replace("Semana ", ""));
+        List<LocalDate> diasSemana = Globals.getSemanaCompleta(semana);
+        List<Entrenamiento> entrenamientos = new ArrayList<>();
+
+        String lunes = etLunes.getText().toString();
+        String lunesKM = etLunesKM.getText().toString();
+        String martes = etMartes.getText().toString();
+        String martesKM = etMartesKM.getText().toString();
+        String miercoles = etMiercoles.getText().toString();
+        String miercolesKM = etMiercolesKM.getText().toString();
+        String jueves = etJueves.getText().toString();
+        String juevesKM = etJuevesKM.getText().toString();
+        String viernes = etViernes.getText().toString();
+        String viernesKM = etViernesKM.getText().toString();
+        String sabado = etSabado.getText().toString();
+        String sabadoKM = etSabadoKM.getText().toString();
+        String domingo = etDomingo.getText().toString();
+        String domingoKM = etDomingoKM.getText().toString();
+
+        if (lunes.isEmpty() && lunesKM.isEmpty() &&
+                martes.isEmpty() && martesKM.isEmpty() &&
+                miercoles.isEmpty() && miercolesKM.isEmpty() &&
+                jueves.isEmpty() && juevesKM.isEmpty() &&
+                viernes.isEmpty() && viernesKM.isEmpty() &&
+                sabado.isEmpty() && sabadoKM.isEmpty() &&
+                domingo.isEmpty() && domingoKM.isEmpty()) {
+            Snackbar.make(view, "Debe rellenar los campos de al menos 1 día.", Snackbar.LENGTH_LONG).show();
+        } else {
+            for (LocalDate dia : diasSemana) {
+                Entrenamiento entrenamiento = new Entrenamiento();
+                entrenamiento.id = UUID.randomUUID().toString();
+                entrenamiento.nSemana = semana;
+                if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
+                    entrenamiento.idDeportista = Globals.usuario.id;
                 } else {
-                    for (LocalDate dia : diasSemana) {
-                        Entrenamiento entrenamiento = new Entrenamiento();
-                        entrenamiento.id = UUID.randomUUID().toString();
-                        entrenamiento.nSemana = semana;
-                        if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
-                            entrenamiento.idDeportista = Globals.usuario.id;
-                        } else {
-                            entrenamiento.idDeportista = idDeportistaSel;
-                            entrenamiento.idEntrenador = Globals.usuario.id;
-                        }
-                        switch (dia.getDayOfWeek()) {
-                            case MONDAY:
-                                addEntrenamiento(dia, entrenamiento, lunes, lunesKM, entrenamientos);
-                                break;
-                            case TUESDAY:
-                                addEntrenamiento(dia, entrenamiento, martes, martesKM, entrenamientos);
-                                break;
-                            case WEDNESDAY:
-                                addEntrenamiento(dia, entrenamiento, miercoles, miercolesKM, entrenamientos);
-                                break;
-                            case THURSDAY:
-                                addEntrenamiento(dia, entrenamiento, jueves, juevesKM, entrenamientos);
-                                break;
-                            case FRIDAY:
-                                addEntrenamiento(dia, entrenamiento, viernes, viernesKM, entrenamientos);
-                                break;
-                            case SATURDAY:
-                                addEntrenamiento(dia, entrenamiento, sabado, sabadoKM, entrenamientos);
-                                break;
-                            case SUNDAY:
-                                addEntrenamiento(dia, entrenamiento, domingo, domingoKM, entrenamientos);
-                                break;
-                        }
-                    }
+                    entrenamiento.idDeportista = idDeportistaSel;
+                    entrenamiento.idEntrenador = Globals.usuario.id;
+                }
+                switch (dia.getDayOfWeek()) {
+                    case MONDAY:
+                        addEntrenamiento(dia, entrenamiento, lunes, lunesKM, entrenamientos);
+                        break;
+                    case TUESDAY:
+                        addEntrenamiento(dia, entrenamiento, martes, martesKM, entrenamientos);
+                        break;
+                    case WEDNESDAY:
+                        addEntrenamiento(dia, entrenamiento, miercoles, miercolesKM, entrenamientos);
+                        break;
+                    case THURSDAY:
+                        addEntrenamiento(dia, entrenamiento, jueves, juevesKM, entrenamientos);
+                        break;
+                    case FRIDAY:
+                        addEntrenamiento(dia, entrenamiento, viernes, viernesKM, entrenamientos);
+                        break;
+                    case SATURDAY:
+                        addEntrenamiento(dia, entrenamiento, sabado, sabadoKM, entrenamientos);
+                        break;
+                    case SUNDAY:
+                        addEntrenamiento(dia, entrenamiento, domingo, domingoKM, entrenamientos);
+                        break;
+                }
+            }
 
-                    if (!entrenamientos.isEmpty()) {
-                        for (Entrenamiento entrenamiento : entrenamientos) {
-                            if (esNuevo) {
-                                // Generar una nueva clave única para el entrenamiento
-                                String id = mDatabase.child("entrenamiento").push().getKey();
+            if (!entrenamientos.isEmpty()) {
+                for (Entrenamiento entrenamiento : entrenamientos) {
+                    if (esNuevo) {
+                        // Generar una nueva clave única para el entrenamiento
+                        String id = mDatabase.child("entrenamiento").push().getKey();
 
-                                mDatabase.child("entrenamiento").child(id).setValue(entrenamiento)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Snackbar.make(view, "Entrenamiento registrado con éxito.", Snackbar.LENGTH_LONG).show();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(Exception e) {
-                                                Snackbar.make(view, "Error al registrar el entrenamiento: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                                            }
-                                        });
-                            } else {
-                                for (LocalDate dia : diasSemana) {
-                                    LocalDate diaEntrenamiento = Globals.textToLocalDate(entrenamiento.fecha);
-                                    if (dia.isEqual(diaEntrenamiento)) {
-                                        switch (dia.getDayOfWeek()) {
-                                            case MONDAY:
-                                                updateEntrenamiento(idLunes.getText().toString(), dia, entrenamiento, etLunes.getText().toString(), etLunesKM.getText().toString());
-                                                break;
-                                            case TUESDAY:
-                                                updateEntrenamiento(idMartes.getText().toString(), dia, entrenamiento, etMartes.getText().toString(), etMartesKM.getText().toString());
-                                                break;
-                                            case WEDNESDAY:
-                                                updateEntrenamiento(idMiercoles.getText().toString(), dia, entrenamiento, etMiercoles.getText().toString(), etMiercolesKM.getText().toString());
-                                                break;
-                                            case THURSDAY:
-                                                updateEntrenamiento(idJueves.getText().toString(), dia, entrenamiento, etJueves.getText().toString(), etJuevesKM.getText().toString());
-                                                break;
-                                            case FRIDAY:
-                                                updateEntrenamiento(idViernes.getText().toString(), dia, entrenamiento, etViernes.getText().toString(), etViernesKM.getText().toString());
-                                                break;
-                                            case SATURDAY:
-                                                updateEntrenamiento(idSabado.getText().toString(), dia, entrenamiento, etSabado.getText().toString(), etSabadoKM.getText().toString());
-                                                break;
-                                            case SUNDAY:
-                                                updateEntrenamiento(idDomingo.getText().toString(), dia, entrenamiento, etDomingo.getText().toString(), etDomingoKM.getText().toString());
-                                                break;
-                                        }
+                        mDatabase.child("entrenamiento").child(id).setValue(entrenamiento)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Snackbar.make(view, "Entrenamiento registrado con éxito.", Snackbar.LENGTH_LONG).show();
                                     }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        Snackbar.make(view, "Error al registrar el entrenamiento: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                    } else {
+                        for (LocalDate dia : diasSemana) {
+                            LocalDate diaEntrenamiento = Globals.textToLocalDate(entrenamiento.fecha);
+                            if (dia.isEqual(diaEntrenamiento)) {
+                                switch (dia.getDayOfWeek()) {
+                                    case MONDAY:
+                                        updateEntrenamiento(idLunes.getText().toString(), dia, entrenamiento, etLunes.getText().toString(), etLunesKM.getText().toString());
+                                        break;
+                                    case TUESDAY:
+                                        updateEntrenamiento(idMartes.getText().toString(), dia, entrenamiento, etMartes.getText().toString(), etMartesKM.getText().toString());
+                                        break;
+                                    case WEDNESDAY:
+                                        updateEntrenamiento(idMiercoles.getText().toString(), dia, entrenamiento, etMiercoles.getText().toString(), etMiercolesKM.getText().toString());
+                                        break;
+                                    case THURSDAY:
+                                        updateEntrenamiento(idJueves.getText().toString(), dia, entrenamiento, etJueves.getText().toString(), etJuevesKM.getText().toString());
+                                        break;
+                                    case FRIDAY:
+                                        updateEntrenamiento(idViernes.getText().toString(), dia, entrenamiento, etViernes.getText().toString(), etViernesKM.getText().toString());
+                                        break;
+                                    case SATURDAY:
+                                        updateEntrenamiento(idSabado.getText().toString(), dia, entrenamiento, etSabado.getText().toString(), etSabadoKM.getText().toString());
+                                        break;
+                                    case SUNDAY:
+                                        updateEntrenamiento(idDomingo.getText().toString(), dia, entrenamiento, etDomingo.getText().toString(), etDomingoKM.getText().toString());
+                                        break;
                                 }
                             }
                         }
-                    } else {
-                        Snackbar.make(view, "Sin datos que registrar. Rellene los dos campos del día que quiera registrar.", Snackbar.LENGTH_LONG).show();
                     }
                 }
+            } else {
+                Snackbar.make(view, "Sin datos que registrar. Rellene los dos campos del día que quiera registrar.", Snackbar.LENGTH_LONG).show();
             }
-        });
-
-        return mView;
+        }
     }
 
     private static void addEntrenamiento(LocalDate fecha, Entrenamiento entrenamiento, String sesiondia, String sesionkm, List<Entrenamiento> entrenamientos) {
@@ -291,25 +299,6 @@ public class SemanaFragment extends Fragment {
         });
     }
 
-    private List<LocalDate> getSemanaCompleta(int semana) {
-        int anio = LocalDate.now().getYear();
-
-        // Obtener el primer día de la semana (lunes) dada la semana del año y el año
-        LocalDate primerDiaSemana = LocalDate.of(anio, 1, 1)
-                .with(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear(), semana)
-                .with(DayOfWeek.MONDAY);
-
-        // Crear una lista para almacenar los 7 días de la semana
-        List<LocalDate> diasSemana = new ArrayList<>();
-
-        // Agregar el primer día de la semana y los siguientes 6 días a la lista
-        for (int i = 0; i < 7; i++) {
-            diasSemana.add(primerDiaSemana.plusDays(i));
-        }
-
-        // Imprimir la lista de días de la semana
-        return diasSemana;
-    }
 
     private final DatePickerDialog.OnDateSetListener dateSetListenerFiltro = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -327,10 +316,9 @@ public class SemanaFragment extends Fragment {
         etFiltroFecha.setText(sdf.format(calendarFiltro.getTime()));
         semanaSelect = calendarFiltro.get(Calendar.WEEK_OF_YEAR);
         etFiltroSemana.setText("Semana " + semanaSelect);
-        if (spDeportista.getVisibility() == View.GONE){
+        if (spDeportista.getVisibility() == View.GONE) {
             rellenarDatos(Globals.usuario, semanaSelect);
-        }
-        else{
+        } else {
             Usuario usuario = new Usuario();
             usuario.id = idDeportistaSel;
             rellenarDatos(usuario, semanaSelect);
@@ -422,42 +410,42 @@ public class SemanaFragment extends Fragment {
                             case MONDAY:
                                 idLunes.setText(entrenamiento.id);
                                 etLunes.setText(entrenamiento.sesion);
-                                etLunesKM.setText(String.valueOf(entrenamiento.km));
+                                etLunesKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case TUESDAY:
                                 idMartes.setText(entrenamiento.id);
                                 etMartes.setText(entrenamiento.sesion);
-                                etMartesKM.setText(String.valueOf(entrenamiento.km));
+                                etMartesKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case WEDNESDAY:
                                 idMiercoles.setText(entrenamiento.id);
                                 etMiercoles.setText(entrenamiento.sesion);
-                                etMiercolesKM.setText(String.valueOf(entrenamiento.km));
+                                etMiercolesKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case THURSDAY:
                                 idJueves.setText(entrenamiento.id);
                                 etJueves.setText(entrenamiento.sesion);
-                                etJuevesKM.setText(String.valueOf(entrenamiento.km));
+                                etJuevesKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case FRIDAY:
                                 idViernes.setText(entrenamiento.id);
                                 etViernes.setText(entrenamiento.sesion);
-                                etViernesKM.setText(String.valueOf(entrenamiento.km));
+                                etViernesKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case SATURDAY:
                                 idSabado.setText(entrenamiento.id);
                                 etSabado.setText(entrenamiento.sesion);
-                                etSabadoKM.setText(String.valueOf(entrenamiento.km));
+                                etSabadoKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                             case SUNDAY:
                                 idDomingo.setText(entrenamiento.id);
                                 etDomingo.setText(entrenamiento.sesion);
-                                etDomingoKM.setText(String.valueOf(entrenamiento.km));
+                                etDomingoKM.setText(entrenamiento.km != 0 ? String.valueOf(entrenamiento.km) : "");
                                 break;
                         }
                     }
                 }
-                if (esNuevo){
+                if (esNuevo) {
                     limpiarCampos();
                 }
             }
@@ -471,7 +459,7 @@ public class SemanaFragment extends Fragment {
         });
     }
 
-    private void limpiarCampos(){
+    private void limpiarCampos() {
         idLunes.setText("");
         etLunes.setText("");
         etLunesKM.setText("");

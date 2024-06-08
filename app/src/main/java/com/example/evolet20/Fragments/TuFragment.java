@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class TuFragment extends Fragment {
+    private View mView;
     private DatabaseReference mDatabase;
     private ConnectivityManager connectivityManager;
     
@@ -47,62 +48,70 @@ public class TuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tu, container, false);
+        mView = inflater.inflate(R.layout.fragment_tu, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        try {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        btnGuardar = view.findViewById(R.id.btnGuardar);
-        btnEditar = view.findViewById(R.id.btnEditar);
-        etNombre = view.findViewById(R.id.etNombre);
-        etEmail = view.findViewById(R.id.etEmail);
-        etPass = view.findViewById(R.id.etPass);
-        etPass2 = view.findViewById(R.id.etPass2);
+            btnGuardar = mView.findViewById(R.id.btnGuardar);
+            btnEditar = mView.findViewById(R.id.btnEditar);
+            etNombre = mView.findViewById(R.id.etNombre);
+            etEmail = mView.findViewById(R.id.etEmail);
+            etPass = mView.findViewById(R.id.etPass);
+            etPass2 = mView.findViewById(R.id.etPass2);
 
-        etNombre.setText(Globals.usuario.nombre);
-        etEmail.setText(Globals.usuario.email);
+            etNombre.setText(Globals.usuario.nombre);
+            etEmail.setText(Globals.usuario.email);
 
-        btnEditar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableCampos(true);
-            }
-        });
-
-
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isNetworkAvailable()) {
-                    Snackbar.make(view, "No se puede realizar el registro sin conexión a internet.", Snackbar.LENGTH_LONG).show();
-                    return;
+            btnEditar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    enableCampos(true);
                 }
+            });
 
-                String nombre = etNombre.getText().toString();
-                String email = etEmail.getText().toString();
-                String pass = etPass.getText().toString();
-                String pass2 = etPass2.getText().toString();
 
-                if (!isValidEmail(email)) {
-                    Snackbar.make(view, "Por favor, introduce un correo electrónico válido", Snackbar.LENGTH_LONG).show();
-                    return;
+            btnGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SaveData(view);
                 }
+            });
+        } catch (Exception e) {
+            Snackbar.make(mView, "Ha ocurrido un error inesperado: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
 
-                if (!pass.equals(pass2)) {
-                    Snackbar.make(view, "Las contraseñas no coinciden", Snackbar.LENGTH_LONG).show();
-                    return;
-                }
+        return mView;
+    }
 
-                String hashPass = "";
-                if (!pass.equalsIgnoreCase("") && !pass2.equalsIgnoreCase("")) {
-                    hashPass = BCrypt.hashpw(pass, BCrypt.gensalt());
-                }
+    private void SaveData(View view) {
+        if (!isNetworkAvailable()) {
+            Snackbar.make(view, "No se puede realizar el registro sin conexión a internet.", Snackbar.LENGTH_LONG).show();
+            return;
+        }
 
-                updateUsuario(view, nombre, email, hashPass);
-                enableCampos(false);
-            }
-        });
+        String nombre = etNombre.getText().toString();
+        String email = etEmail.getText().toString();
+        String pass = etPass.getText().toString();
+        String pass2 = etPass2.getText().toString();
 
-        return view;
+        if (!isValidEmail(email)) {
+            Snackbar.make(view, "Por favor, introduce un correo electrónico válido", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!pass.equals(pass2)) {
+            Snackbar.make(view, "Las contraseñas no coinciden", Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        String hashPass = "";
+        if (!pass.equalsIgnoreCase("") && !pass2.equalsIgnoreCase("")) {
+            hashPass = BCrypt.hashpw(pass, BCrypt.gensalt());
+        }
+
+        updateUsuario(view, nombre, email, hashPass);
+        enableCampos(false);
     }
 
     private void enableCampos(boolean enabled) {

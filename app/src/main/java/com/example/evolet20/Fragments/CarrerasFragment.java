@@ -48,7 +48,7 @@ public class CarrerasFragment extends Fragment {
     private Button btnNewCarrera;
     private Spinner spFiltroTipo, spFiltroDistancia, spNewTipo, spNewDistancia;
     private EditText etFiltroFecha, etNewFecha, etNewLugar;
-    private ImageButton ibFiltroFecha, ibNewFecha;
+    private ImageButton ibFiltroFecha, ibNewFecha, ibClearFecha;
     private final Calendar calendarFiltro = Calendar.getInstance();
     private final Calendar calendarNew = Calendar.getInstance();
 
@@ -65,56 +65,62 @@ public class CarrerasFragment extends Fragment {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_carreras, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        try {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        spVisible(mView);
-        rellenarSpinners(mView);
+            spVisible(mView);
+            rellenarSpinners(mView);
 
-        etFiltroFecha = mView.findViewById(R.id.etFiltroFecha);
-        ibFiltroFecha = mView.findViewById(R.id.ibFiltroFecha);
-        ibFiltroFecha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(getContext(), dateSetListenerFiltro,
-                        calendarFiltro.get(Calendar.YEAR), calendarFiltro.get(Calendar.MONTH),
-                        calendarFiltro.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        etNewFecha = mView.findViewById(R.id.etNewFecha);
-        ibNewFecha = mView.findViewById(R.id.ibNewFecha);
-        ibNewFecha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(getContext(), dateSetListenerNew,
-                        calendarNew.get(Calendar.YEAR), calendarNew.get(Calendar.MONTH),
-                        calendarNew.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        etNewLugar = mView.findViewById(R.id.etNewLugar);
-
-        btnNewCarrera = mView.findViewById(R.id.btnNewCarrera);
-        btnNewCarrera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isNetworkAvailable()) {
-                    registrarCarrera(view);
-                } else {
-                    Snackbar.make(view, "No se puede realizar el registro sin conexión a internet.", Snackbar.LENGTH_LONG).show();
+            etFiltroFecha = mView.findViewById(R.id.etFiltroFecha);
+            ibFiltroFecha = mView.findViewById(R.id.ibFiltroFecha);
+            ibFiltroFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(getContext(), dateSetListenerFiltro,
+                            calendarFiltro.get(Calendar.YEAR), calendarFiltro.get(Calendar.MONTH),
+                            calendarFiltro.get(Calendar.DAY_OF_MONTH)).show();
                 }
-            }
-        });
+            });
+
+            etNewFecha = mView.findViewById(R.id.etNewFecha);
+            ibNewFecha = mView.findViewById(R.id.ibNewFecha);
+            ibNewFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(getContext(), dateSetListenerNew,
+                            calendarNew.get(Calendar.YEAR), calendarNew.get(Calendar.MONTH),
+                            calendarNew.get(Calendar.DAY_OF_MONTH)).show();
+                }
+            });
+
+            etNewLugar = mView.findViewById(R.id.etNewLugar);
+
+            btnNewCarrera = mView.findViewById(R.id.btnNewCarrera);
+            btnNewCarrera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isNetworkAvailable()) {
+                        registrarCarrera(view);
+                    } else {
+                        Snackbar.make(view, "No se puede realizar el registro sin conexión a internet.", Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            ibClearFecha = mView.findViewById(R.id.ibClearFecha);
+            ibClearFecha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    etFiltroFecha.setText("");
+                    filtroCarrera.fecha = null;
+                    rellenarListView(mView, filtroCarrera);
+                }
+            });
+        } catch (Exception e) {
+            Snackbar.make(mView, "Ha ocurrido un error inesperado: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
 
         return mView;
-    }
-
-    private void selectDiaSemana(View view) {
-        etFiltroFecha = view.findViewById(R.id.etFiltroFecha);
-        filtroCarrera.fecha = Globals.LocalDateToText(Globals.fechaActual);
-
-        // Mostrar la fecha actual en el EditText
-        etFiltroFecha.setText(Globals.LocalDateToText(Globals.fechaActual));
     }
 
     private final DatePickerDialog.OnDateSetListener dateSetListenerFiltro = new DatePickerDialog.OnDateSetListener() {
@@ -155,7 +161,6 @@ public class CarrerasFragment extends Fragment {
         Spinner spDeportista = view.findViewById(R.id.spDeportista);
         if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
             spDeportista.setVisibility(View.GONE);
-            selectDiaSemana(mView);
             filtroCarrera.idUsuario = Globals.usuario.id;
             rellenarListView(mView, filtroCarrera);
         } else {
@@ -190,7 +195,6 @@ public class CarrerasFragment extends Fragment {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Usuario usuarioSeleccionado = (Usuario) parent.getItemAtPosition(position);
                             filtroCarrera.idUsuario = usuarioSeleccionado.id;
-                            selectDiaSemana(mView);
                             // Cargamos los datos de las carreras del usuario seleccionado
                             rellenarListView(mView, filtroCarrera); // Pasamos la referencia a la vista
                         }

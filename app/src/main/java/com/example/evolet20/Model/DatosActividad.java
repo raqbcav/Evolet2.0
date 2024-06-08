@@ -2,18 +2,18 @@ package com.example.evolet20.Model;
 
 public class DatosActividad {
     public String idEntrenamiento;
-    public double tiempoTotal;
-    public double distanciaTotal;
-    public double velocidadMedia;
-    public int fc;
+    public String tiempoTotal;
+    public String distanciaTotal;
+    public String velocidadMedia;
+    public String fc;
     public String comentario;
-    public boolean fuerza;
-    public boolean rodaje;
+    public String fuerza;
+    public String rodaje;
 
     public DatosActividad() {
     }
 
-    public DatosActividad(String idEntrenamiento, double tiempoTotal, double distanciaTotal, double velocidadMedia, int fc, String comentario, boolean fuerza, boolean rodaje) {
+    public DatosActividad(String idEntrenamiento, String tiempoTotal, String distanciaTotal, String velocidadMedia, String fc, String comentario, String fuerza, String rodaje) {
         this.idEntrenamiento = idEntrenamiento;
         this.tiempoTotal = tiempoTotal;
         this.distanciaTotal = distanciaTotal;
