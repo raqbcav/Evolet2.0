@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -46,8 +47,10 @@ public class HoyFragment extends Fragment {
     private DatabaseReference mDatabase;
     private Spinner spDeportista;
     private CheckBox cbFuerza, cbRodaje;
-    private EditText etTiempo, etDistancia, etVelocidad, etFrecuencia;
+    private EditText etTiempo, etDistancia, etVelocidad, etFrecuencia, etFeedback;
     private String idEntrenamiento;
+    private Button btnEnviar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +71,17 @@ public class HoyFragment extends Fragment {
         etDistancia = mView.findViewById(R.id.etDistancia);
         etVelocidad = mView.findViewById(R.id.etVelocidad);
         etFrecuencia = mView.findViewById(R.id.etFrecuencia);
+        etFeedback = mView.findViewById(R.id.etFeedback);
+        btnEnviar = mView.findViewById(R.id.btnEnviar);
 
         spVisible(mView);
+
+        btnEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return mView;
     }
@@ -82,6 +94,8 @@ public class HoyFragment extends Fragment {
         etDistancia.setEnabled(enabled);
         etVelocidad.setEnabled(enabled);
         etFrecuencia.setEnabled(enabled);
+        etFeedback.setEnabled(enabled);
+        btnEnviar.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     private void cargarDatos(Usuario usuario){
@@ -117,7 +131,10 @@ public class HoyFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
+                        etTiempo.setText(snapshot.child("tiempoTotal").getValue(String.class));
+                        etDistancia.setText(snapshot.child("distanciaTotal").getValue(String.class));
+                        etVelocidad.setText(snapshot.child("velocidadMedia").getValue(String.class));
+                        etFrecuencia.setText(snapshot.child("fc").getValue(String.class));
                     }
                 }
             }
