@@ -18,4 +18,9 @@ public class Usuario {
         this.email = email;
         this.pass = pass;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

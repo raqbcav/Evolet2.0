@@ -155,7 +155,7 @@ public class CarrerasFragment extends Fragment {
         Spinner spDeportista = view.findViewById(R.id.spDeportista);
         if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
             spDeportista.setVisibility(View.GONE);
-            selectDiaSemana(view);
+            selectDiaSemana(mView);
             filtroCarrera.idUsuario = Globals.usuario.id;
             rellenarListView(mView, filtroCarrera);
         } else {
@@ -168,8 +168,9 @@ public class CarrerasFragment extends Fragment {
                     // Iterar sobre los usuarios y agregarlos a la lista
                     for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
                         String idUsuario = usuarioSnapshot.child("id").getValue(String.class);
-                        String nombreUsuario = usuarioSnapshot.child("nombreUsuario").getValue(String.class);
-                        if (nombreUsuario != null) {
+                        String nombreUsuario = usuarioSnapshot.child("nombre").getValue(String.class);
+                        String perfilusuario = usuarioSnapshot.child("perfil").getValue(String.class);
+                        if (nombreUsuario != null && perfilusuario.equalsIgnoreCase("deportista")) {
                             Usuario usuario = new Usuario();
                             usuario.id = idUsuario;
                             usuario.nombre = nombreUsuario;
@@ -189,7 +190,7 @@ public class CarrerasFragment extends Fragment {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Usuario usuarioSeleccionado = (Usuario) parent.getItemAtPosition(position);
                             filtroCarrera.idUsuario = usuarioSeleccionado.id;
-                            selectDiaSemana(view);
+                            selectDiaSemana(mView);
                             // Cargamos los datos de las carreras del usuario seleccionado
                             rellenarListView(mView, filtroCarrera); // Pasamos la referencia a la vista
                         }
