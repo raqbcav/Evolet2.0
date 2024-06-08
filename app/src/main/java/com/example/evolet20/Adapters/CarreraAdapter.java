@@ -39,10 +39,10 @@ public class CarreraAdapter extends ArrayAdapter<Carrera> {
         TextView tvDistancia = listItem.findViewById(R.id.tvDistancia);
         TextView tvLugar = listItem.findViewById(R.id.tvLugar);
         TextView tvFecha = listItem.findViewById(R.id.tvFecha);
-        tvTipo.setText(carrera.tipo);
-        tvDistancia.setText(carrera.distancia);
-        tvLugar.setText(carrera.lugar);
-        tvFecha.setText(carrera.fecha);
+        tvTipo.setText("Tipo: " + carrera.tipo);
+        tvDistancia.setText(carrera.distancia + "K");
+        tvLugar.setText("Lugar: " + carrera.lugar);
+        tvFecha.setText("Fecha: " + carrera.fecha);
 
         return listItem;
     }

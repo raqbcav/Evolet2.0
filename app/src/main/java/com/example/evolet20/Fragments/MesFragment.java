@@ -47,24 +47,28 @@ public class MesFragment extends Fragment {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_mes, container, false);
 
-        calendarView = mView.findViewById(R.id.calendarView);
-        etTotalDias = mView.findViewById(R.id.etTotalDias);
-        etDistanciaE = mView.findViewById(R.id.etDistanciaE);
-        etDistanciaC = mView.findViewById(R.id.etDistanciaC);
-        etTotalCarreras = mView.findViewById(R.id.etTotalCarreras);
+        try {
+            calendarView = mView.findViewById(R.id.calendarView);
+            etTotalDias = mView.findViewById(R.id.etTotalDias);
+            etDistanciaE = mView.findViewById(R.id.etDistanciaE);
+            etDistanciaC = mView.findViewById(R.id.etDistanciaC);
+            etTotalCarreras = mView.findViewById(R.id.etTotalCarreras);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        spVisible(mView);
+            spVisible(mView);
 
-        // Escuchar los eventos de selección de fecha
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                // Manejar la fecha seleccionada
+            // Escuchar los eventos de selección de fecha
+            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                    // Manejar la fecha seleccionada
 
-            }
-        });
+                }
+            });
+        } catch (Exception e) {
+            Snackbar.make(mView, "Ha ocurrido un error inesperado: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
 
         return mView;
     }
