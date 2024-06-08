@@ -4,14 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.evolet20.Model.Carrera;
 import com.example.evolet20.Model.Entrenamiento;
+import com.example.evolet20.Model.Usuario;
 import com.example.evolet20.R;
 import com.example.evolet20.Static.Globals;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,7 +53,9 @@ public class MesFragment extends Fragment {
         etDistanciaC = mView.findViewById(R.id.etDistanciaC);
         etTotalCarreras = mView.findViewById(R.id.etTotalCarreras);
 
-        cargarDatos();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        spVisible(mView);
 
         // Escuchar los eventos de selección de fecha
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -63,9 +69,62 @@ public class MesFragment extends Fragment {
         return mView;
     }
 
-    private void cargarDatos() {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+    private void spVisible(View view) {
+        Spinner spDeportista = view.findViewById(R.id.spDeportista);
+        if (Globals.usuario.perfil.equalsIgnoreCase("deportista")) {
+            spDeportista.setVisibility(View.GONE);
+            cargarDatos(Globals.usuario);
+        } else {
+            // Agregar un listener para obtener los datos de los usuarios
+            mDatabase.child("usuario").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    List<Usuario> usuarios = new ArrayList<>();
 
+                    // Iterar sobre los usuarios y agregarlos a la lista
+                    for (DataSnapshot usuarioSnapshot : dataSnapshot.getChildren()) {
+                        String idUsuario = usuarioSnapshot.child("id").getValue(String.class);
+                        String nombreUsuario = usuarioSnapshot.child("nombre").getValue(String.class);
+                        String perfilusuario = usuarioSnapshot.child("perfil").getValue(String.class);
+                        if (nombreUsuario != null && perfilusuario.equalsIgnoreCase("deportista")) {
+                            Usuario usuario = new Usuario();
+                            usuario.id = idUsuario;
+                            usuario.nombre = nombreUsuario;
+                            usuarios.add(usuario);
+                        }
+                    }
+
+                    // Crear un ArrayAdapter para el Spinner
+                    ArrayAdapter<Usuario> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, usuarios);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    // Establecer el adaptador en el Spinner
+                    spDeportista.setAdapter(adapter);
+                    // Definir un listener para manejar la selección del Spinner si es necesario
+                    spDeportista.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Usuario usuarioSeleccionado = (Usuario) parent.getItemAtPosition(position);
+                            cargarDatos(usuarioSeleccionado);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                            // Método requerido pero no necesitamos implementarlo aquí
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Manejar el error en caso de que falle la lectura de datos
+                    Snackbar.make(view, "Error al leer los datos de Firebase: " + databaseError.getMessage(), Snackbar.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private void cargarDatos(Usuario usuario) {
         List<Carrera> carreras = new ArrayList<>();
         List<Entrenamiento> entrenamientos = new ArrayList<>();
 
@@ -82,7 +141,7 @@ public class MesFragment extends Fragment {
 
                 for (Carrera carrera : carreras) {
                     LocalDate fecha = Globals.textToLocalDate(carrera.fecha);
-                    if (fecha.getMonth() == LocalDate.now().getMonth()){
+                    if (fecha.getMonth() == LocalDate.now().getMonth() && carrera.idUsuario.equalsIgnoreCase(usuario.id)){
                         totalCarreras ++;
                         distanciaCarreras += Double.parseDouble(carrera.distancia.replace("K", ""));
                     }
@@ -111,7 +170,8 @@ public class MesFragment extends Fragment {
 
                 for (Entrenamiento entrenamiento : entrenamientos) {
                     LocalDate fecha = Globals.textToLocalDate(entrenamiento.fecha);
-                    if (fecha.getMonth() == LocalDate.now().getMonth()){
+                    if (fecha.getMonth() == LocalDate.now().getMonth() && entrenamiento.idDeportista.equalsIgnoreCase(usuario.id)
+                    && !entrenamiento.sesion.equalsIgnoreCase("") && entrenamiento.km != 0){
                         totalDias ++;
                         distanciaEntrenamientos += entrenamiento.km;
                     }
