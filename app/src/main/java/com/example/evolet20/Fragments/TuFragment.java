@@ -115,7 +115,6 @@ public class TuFragment extends Fragment {
     }
 
     private void updateUsuario(View view, String nombre, String email, String pass) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         // Crear un query para buscar el usuario por su id
         Query query = mDatabase.child("usuario").orderByChild("id").equalTo(Globals.usuario.id);
 

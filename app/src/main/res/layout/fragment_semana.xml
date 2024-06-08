@@ -87,6 +87,12 @@
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
+        <TextView
+            android:id="@+id/idLunes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <!-- Botón -->
         <Button
             android:id="@+id/btnLunes"
@@ -119,6 +125,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/idMartes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <!-- Botón -->
         <Button
@@ -153,6 +165,12 @@
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
+        <TextView
+            android:id="@+id/idMiercoles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <!-- Botón -->
         <Button
             android:id="@+id/btnMiercoles"
@@ -185,6 +203,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/idJueves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <!-- Botón -->
         <Button
@@ -219,6 +243,12 @@
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
+        <TextView
+            android:id="@+id/idViernes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <!-- Botón -->
         <Button
             android:id="@+id/btnViernes"
@@ -252,6 +282,12 @@
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
+        <TextView
+            android:id="@+id/idSabado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <!-- Botón -->
         <Button
             android:id="@+id/btnSabado"
@@ -284,6 +320,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/idDomingo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <!-- Botón -->
         <Button

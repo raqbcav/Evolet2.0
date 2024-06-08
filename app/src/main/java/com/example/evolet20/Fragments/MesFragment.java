@@ -41,7 +41,7 @@ public class MesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_mes_tab, container, false);
+        mView = inflater.inflate(R.layout.fragment_mes, container, false);
 
         calendarView = mView.findViewById(R.id.calendarView);
         etTotalDias = mView.findViewById(R.id.etTotalDias);
