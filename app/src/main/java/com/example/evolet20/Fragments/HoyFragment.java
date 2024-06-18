@@ -161,7 +161,7 @@ public class HoyFragment extends Fragment {
                     Snackbar.make(mView, "No se encontró entrenamiento para el dia: " + fecha, Snackbar.LENGTH_LONG).show();
                     btnEnviar.setVisibility(View.GONE);
                 }
-                if (!idEntrenamiento.isEmpty()) {
+                if (idEntrenamiento != null && !idEntrenamiento.isEmpty()) {
                     cargarActividad(idEntrenamiento);
                 }
 
